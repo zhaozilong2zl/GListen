@@ -248,6 +248,6 @@ bash setup.sh
 ## 联系方式
 2507844603@qq.com
 
-## 许可证
+## LICENSE
 
 MIT
