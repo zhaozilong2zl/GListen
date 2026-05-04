@@ -1,8 +1,8 @@
 """
 语音输入识别历史的 SQLite 存储。
 
-DB 路径遵循 XDG 规范：$XDG_DATA_HOME/voice-input/history.db，
-默认 ~/.local/share/voice-input/history.db。
+DB 路径遵循 XDG 规范：$XDG_DATA_HOME/glisten/history.db，
+默认 ~/.local/share/glisten/history.db。
 
 表结构只存文本元信息，不存原始音频（音频文件会很快堆爆盘）。
 """
@@ -17,7 +17,7 @@ from typing import List, Optional, Tuple
 def _db_path() -> Path:
     base = os.environ.get("XDG_DATA_HOME")
     root = Path(base) if base else Path.home() / ".local" / "share"
-    return root / "voice-input" / "history.db"
+    return root / "glisten" / "history.db"
 
 
 _SCHEMA = """

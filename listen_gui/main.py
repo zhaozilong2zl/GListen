@@ -3,7 +3,7 @@
 Listen 设置窗入口。
 
 必须用系统 /usr/bin/python3 跑 —— anaconda 的 libtk 没链 libXft/libfontconfig，
-中文字体会 fallback 成方块。cli.py 的 `voice-input config` 子命令负责用对的解释器启动。
+中文字体会 fallback 成方块。cli.py 的 `glisten config` 子命令负责用对的解释器启动。
 """
 import sys
 from pathlib import Path

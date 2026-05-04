@@ -101,7 +101,7 @@ class AboutPage(tk.Frame):
         left.pack(side="left", fill="x", expand=True)
         tk.Label(left, text="运行状态", bg=T.BG_CARD, fg=T.TEXT,
                  font=self.fonts.body, anchor="w").pack(anchor="w")
-        tk.Label(left, text="voice-input.service (systemd --user)",
+        tk.Label(left, text="glisten.service (systemd --user)",
                  bg=T.BG_CARD, fg=T.TEXT_MUTED,
                  font=self.fonts.small, anchor="w",
                  wraplength=320).pack(anchor="w", pady=(2, 0))
@@ -150,7 +150,7 @@ class AboutPage(tk.Frame):
     def _stop(self):
         try:
             r = subprocess.run(
-                ["systemctl", "--user", "stop", "voice-input"],
+                ["systemctl", "--user", "stop", "glisten"],
                 capture_output=True, text=True, timeout=6,
             )
             if r.returncode == 0:
@@ -280,7 +280,7 @@ class LogViewer(tk.Toplevel):
         # 顶部工具条
         top = tk.Frame(self, bg=T.BG_APP)
         top.pack(fill="x", padx=12, pady=(12, 6))
-        tk.Label(top, text="journalctl --user -u voice-input -n 200",
+        tk.Label(top, text="journalctl --user -u glisten -n 200",
                  bg=T.BG_APP, fg=T.TEXT_MUTED, font=fonts.mono
                  ).pack(side="left")
         Button(top, fonts, "刷新", command=self._reload,
@@ -309,7 +309,7 @@ class LogViewer(tk.Toplevel):
         self._text.delete("1.0", "end")
         try:
             r = subprocess.run(
-                ["journalctl", "--user", "-u", "voice-input",
+                ["journalctl", "--user", "-u", "glisten",
                  "-n", "200", "--no-pager"],
                 capture_output=True, text=True, timeout=5,
             )

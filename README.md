@@ -9,14 +9,31 @@
                   ↑ 鼠标附近会弹出浮窗显示实时识别文本
 ```
 
-<!-- TODO: 截图放这里。建议一张 GUI 全貌 + 一张浮窗效果 -->
 <p align="center">
-  <img src="docs/screenshots/listen-shortcuts.png" width="700" alt="GListen 设置中心 — 快捷键页">
+  <img src="docs/screenshots/hud-live.png" width="500" alt="实际使用效果展示">
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/hud-live.png" width="500" alt="Listen 设置中心 — 快捷键页">
+  <img src="docs/screenshots/GUI-shortcuts.png" width="500" alt="GListen GUI 设置中心 — 快捷键页">
 </p>
+
+<p align="center">
+  <img src="docs/screenshots/GUI-behavior.png" width="500" alt="GListen GUI 设置中心 — 行为页">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/GUI-post_processing.png" width="500" alt="GListen GUI 设置中心 — 后处理页">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/GUI-history.png" width="500" alt="GListen GUI 设置中心 — 历史页">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/GUI-about.png" width="500" alt="GListen GUI 设置中心 — 关于页">
+</p>
+
+
 
 ## 功能
 
@@ -42,7 +59,7 @@
 
 ### GUI 设置中心
 
-运行 `voice-input config` 打开设置窗口，5 个页面：
+运行 `glisten config` 打开设置窗口，5 个页面：
 
 - **快捷键**：重新绑定主热键、添加/编辑/删除辅助热键
 - **行为**：输入方式（剪贴板粘贴 / 逐字模拟）、粘贴快捷键、浮窗开关、自动标点开关
@@ -54,11 +71,11 @@
 
 ### 识别历史
 
-每次语音输入的结果都会自动保存到本地 SQLite 数据库，记录识别文本、录音时长、目标窗口等信息。可以通过命令行（`voice-input history`）或 GUI 历史页面查看、搜索、删除。
+每次语音输入的结果都会自动保存到本地 SQLite 数据库，记录识别文本、录音时长、目标窗口等信息。可以通过命令行（`glisten history`）或 GUI 历史页面查看、搜索、删除。
 
 ### 系统服务
 
-安装后自动注册为 systemd 用户服务，开机登录就在后台运行，不需要手动启动。进程意外退出也会自动重启。日志可以用 `journalctl --user -u voice-input` 查看。
+安装后自动注册为 systemd 用户服务，开机登录就在后台运行，不需要手动启动。进程意外退出也会自动重启。日志可以用 `journalctl --user -u glisten` 查看。
 
 ## 快速开始
 
@@ -98,14 +115,14 @@ bash setup.sh
 ### 命令行
 
 ```bash
-voice-input history              # 最近 20 条识别记录
-voice-input history -s 关键词    # 搜索
-voice-input history --today      # 只看今天
-voice-input stats                # 统计：条数 / 录音分钟 / DB 大小
-voice-input config               # 打开 GUI 设置窗口
+glisten history              # 最近 20 条识别记录
+glisten history -s 关键词    # 搜索
+glisten history --today      # 只看今天
+glisten stats                # 统计：条数 / 录音分钟 / DB 大小
+glisten config               # 打开 GUI 设置窗口
 ```
 
-### GUI 设置（`voice-input config`）
+### GUI 设置（`glisten config`）
 
 | 页面 | 功能 |
 |---|---|
@@ -120,9 +137,9 @@ voice-input config               # 打开 GUI 设置窗口
 ### 服务管理
 
 ```bash
-systemctl --user status voice-input       # 查看状态
-systemctl --user restart voice-input      # 重启
-journalctl --user -u voice-input -f       # 实时日志
+systemctl --user status glisten       # 查看状态
+systemctl --user restart glisten      # 重启
+journalctl --user -u glisten -f       # 实时日志
 ```
 
 ## 项目背景
@@ -178,7 +195,7 @@ GListen 需要联网 + 火山引擎账号（当然你可以 DIY 成本地模型�
 
 ## 配置格式
 
-`~/.config/voice-input/config.json`：
+`~/.config/glisten/config.json`：
 
 ```jsonc
 {
@@ -219,8 +236,8 @@ bash scripts/package.sh
 **2. 在新电脑上安装**
 
 ```bash
-tar xzf voice-input-*.tar.gz
-cd voice-input
+tar xzf glisten-*.tar.gz
+cd glisten
 bash setup.sh
 ```
 
@@ -236,7 +253,7 @@ bash setup.sh
 | `config.py` | 配置读写（JSON schema + 默认值 + 原子写入） |
 | `keys.py` | 键名转换：配置字符串 ↔ pynput Key ↔ tkinter keysym |
 | `history.py` | SQLite 历史模块 |
-| `cli.py` | CLI 入口，软链为 `~/.local/bin/voice-input` |
+| `cli.py` | CLI 入口，软链为 `~/.local/bin/glisten` |
 | `setup.sh` | 换机一键安装脚本 |
 | `scripts/` | systemd unit 模板、安装 / 卸载 / 打包脚本 |
 

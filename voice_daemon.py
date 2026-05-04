@@ -325,11 +325,8 @@ _WM_NAME_RE = re.compile(r'^WM_NAME\([^)]+\)\s*=\s*"(.*)"\s*$', re.MULTILINE)
 
 
 def get_active_window_info():
-    """抓当前焦点窗口的 WM_CLASS 和标题。F9 按下瞬间调用最合适——
-    那是用户"选定目标窗口"的时刻，之后松开 F9 paste 时焦点应该还在同一个窗口。
-
-    xdotool 的 getwindowclassname 在部分 xdotool 版本/Electron 应用下不可用，
-    所以用 xdotool getactivewindow 拿 wid，再交给 xprop 读 X 属性。
+    """抓当前焦点窗口的 WM_CLASS、标题和窗口 ID。
+    F9 按下瞬间调用——记住目标窗口，松开后粘贴前先切回去。
     """
     try:
         r = subprocess.run(
@@ -340,7 +337,7 @@ def get_active_window_info():
     except Exception:
         wid = ""
     if not wid:
-        return None, None
+        return None, None, None
 
     wm_class = None
     title = None
@@ -358,7 +355,19 @@ def get_active_window_info():
             title = m.group(1) or None
     except Exception:
         pass
-    return wm_class, title
+    return wm_class, title, wid
+
+
+def focus_window(wid):
+    """粘贴前切回按下热键时的目标窗口。解决录音过程中鼠标点了其他窗口的问题。"""
+    if wid:
+        try:
+            subprocess.run(
+                ["xdotool", "windowactivate", "--sync", str(wid)],
+                check=False, timeout=1,
+            )
+        except Exception:
+            pass
 
 
 def input_text(text):
@@ -593,6 +602,8 @@ async def one_session(creds, release_event, overlay=None, meta=None):
                 hk = meta.get("hotkey") or {}
                 print(f"\r✅ {final}" + " " * 10)
 
+                # 粘贴前切回按下热键时的目标窗口（录音中用户可能点了其他窗口）
+                focus_window(meta.get("target_wid"))
                 # 执行 action chain（paste / clipboard / press:xxx）
                 actions = hk.get("actions") or ["paste"]
                 execute_actions(final, actions)
@@ -727,7 +738,7 @@ async def main():
         loop.add_signal_handler(sig, quit_event.set)
 
     print("=" * 60)
-    print("  GListen — voice-input daemon 启动")
+    print("  GListen — glisten daemon 启动")
     print(f"  输入模式: {INPUT_MODE}  | 粘贴快捷键: {PASTE_KEY}")
     print(f"  悬浮框: {'开' if overlay else '关'}")
     print("  热键:")
@@ -760,11 +771,12 @@ async def main():
             press_event.clear()
 
             # 在 main 协程里抓 WM_CLASS（而非 pynput 回调），避免 xdotool 阻塞 pynput 线程
-            wm_class, window_title = get_active_window_info()
+            wm_class, window_title, target_wid = get_active_window_info()
             meta = {
                 "press_ts": state["press_ts"],
                 "wm_class": wm_class,
                 "window_title": window_title,
+                "target_wid": target_wid,
                 "hotkey": state["active_hotkey"],
             }
 

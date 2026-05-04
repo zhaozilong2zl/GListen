@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # 把项目打成可携带的 tar.gz，用于换电脑 / 分发给朋友。
-# 产物默认在 /tmp/voice-input-<日期>.tar.gz，解压到新机后 bash setup.sh 即可。
+# 产物默认在 /tmp/glisten-<日期>.tar.gz，解压到新机后 bash setup.sh 即可。
 #
 # 排除项：venv（新机重建）、历史 DB、缓存、设计稿原文件、git 元数据。
 
 set -euo pipefail
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-NAME="voice-input"
+NAME="glisten"
 DATE=$(date +%Y%m%d)
 OUT="${1:-/tmp/${NAME}-${DATE}.tar.gz}"
 

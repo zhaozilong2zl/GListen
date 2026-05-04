@@ -41,7 +41,7 @@ You can add custom rules in the GUI, e.g. replacing Chinese phonetic renderings 
 
 ### GUI settings center
 
-Run `voice-input config` to open the settings window with 5 pages:
+Run `glisten config` to open the settings window with 5 pages:
 
 - **Shortcuts**: rebind the primary hotkey; add/edit/delete auxiliary hotkeys
 - **Behavior**: input mode (clipboard paste / keystroke simulation), paste key, overlay toggle, auto-punctuation toggle
@@ -53,11 +53,11 @@ Changes take effect immediately (config is saved → service restarts automatica
 
 ### Transcription history
 
-Every voice input is automatically saved to a local SQLite database — text, duration, target window, etc. Browse via CLI (`voice-input history`) or the GUI history page. Search, filter, copy, or delete entries.
+Every voice input is automatically saved to a local SQLite database — text, duration, target window, etc. Browse via CLI (`glisten history`) or the GUI history page. Search, filter, copy, or delete entries.
 
 ### System service
 
-After installation, GListen registers as a systemd user service that starts automatically on login. If the process crashes, it restarts on its own. Logs are available via `journalctl --user -u voice-input`.
+After installation, GListen registers as a systemd user service that starts automatically on login. If the process crashes, it restarts on its own. Logs are available via `journalctl --user -u glisten`.
 
 ## Quick Start
 
@@ -97,14 +97,14 @@ No manual steps needed — the service runs in the background after login. Hold 
 ### CLI
 
 ```bash
-voice-input history              # last 20 transcriptions
-voice-input history -s keyword   # search
-voice-input history --today      # today only
-voice-input stats                # count / recording minutes / DB size
-voice-input config               # open GUI settings
+glisten history              # last 20 transcriptions
+glisten history -s keyword   # search
+glisten history --today      # today only
+glisten stats                # count / recording minutes / DB size
+glisten config               # open GUI settings
 ```
 
-### GUI settings (`voice-input config`)
+### GUI settings (`glisten config`)
 
 | Page | What you can do |
 |---|---|
@@ -119,9 +119,9 @@ Changes take effect immediately (writes config → auto-restarts service, ~1-2 s
 ### Service management
 
 ```bash
-systemctl --user status voice-input
-systemctl --user restart voice-input
-journalctl --user -u voice-input -f       # live logs
+systemctl --user status glisten
+systemctl --user restart glisten
+journalctl --user -u glisten -f       # live logs
 ```
 
 ## Background
@@ -177,7 +177,7 @@ Release   → Stop recording → Wait for final result → Post-process → Acti
 
 ## Config format
 
-`~/.config/voice-input/config.json`:
+`~/.config/glisten/config.json`:
 
 ```jsonc
 {
@@ -218,8 +218,8 @@ This creates a small archive under `/tmp/` (excludes Python environment and cred
 **2. Install on the new machine**
 
 ```bash
-tar xzf voice-input-*.tar.gz
-cd voice-input
+tar xzf glisten-*.tar.gz
+cd glisten
 bash setup.sh
 ```
 
@@ -235,7 +235,7 @@ bash setup.sh
 | `config.py` | JSON config load/save with schema + defaults + atomic write |
 | `keys.py` | Key name conversion: config string ↔ pynput Key ↔ tkinter keysym |
 | `history.py` | SQLite history module |
-| `cli.py` | CLI entry point, symlinked as `~/.local/bin/voice-input` |
+| `cli.py` | CLI entry point, symlinked as `~/.local/bin/glisten` |
 | `setup.sh` | One-command bootstrap for new machines |
 | `scripts/` | systemd unit template, install/uninstall/package scripts |
 

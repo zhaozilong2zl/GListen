@@ -1,6 +1,6 @@
 """Behavior 页 —— 输入模式 / 粘贴键 / 悬浮框 / debug。
 
-改动立即 save 到 config.json 并重启 voice-input 服务。服务重启大约 1-2s 中断，
+改动立即 save 到 config.json 并重启 glisten 服务。服务重启大约 1-2s 中断，
 使用场景里用户不会在录音过程中改设置，所以"立改立生效"最直观。
 """
 import tkinter as tk

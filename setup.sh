@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Listen / voice-input 一键安装脚本
-# 换电脑或首次部署：cd voice-input && bash setup.sh
+# Listen / glisten 一键安装脚本
+# 换电脑或首次部署：cd glisten && bash setup.sh
 #
 # 幂等：重复跑只做必要的事。不会主动 sudo apt install —— 如果系统依赖缺失，
 # 脚本会停下来打印需要的 apt 命令让你自己跑。
@@ -148,9 +148,9 @@ echo
 echo "  按住 F9 说话，松开输入到光标。"
 echo
 echo "  常用命令："
-echo "    voice-input config         打开设置窗（改热键 / 规则 / 查历史）"
-echo "    voice-input history        CLI 查最近 20 条"
-echo "    voice-input stats          统计 / DB 大小"
-echo "    systemctl --user status voice-input     服务状态"
-echo "    journalctl --user -u voice-input -f     实时日志"
+echo "    glisten config         打开设置窗（改热键 / 规则 / 查历史）"
+echo "    glisten history        CLI 查最近 20 条"
+echo "    glisten stats          统计 / DB 大小"
+echo "    systemctl --user status glisten     服务状态"
+echo "    journalctl --user -u glisten -f     实时日志"
 echo

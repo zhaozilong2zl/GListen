@@ -208,7 +208,7 @@ class Shell(tk.Tk):
 
     # ---------- 保存配置 + 重启服务 ----------
     def apply_changes(self, config_dict: dict, restart: bool = True):
-        """写 config.json；可选重启 voice-input。顶部闪一个 toast。"""
+        """写 config.json；可选重启 glisten。顶部闪一个 toast。"""
         import config as vi_config  # 顶层模块
         try:
             vi_config.save(config_dict)
@@ -243,7 +243,7 @@ def query_service_status() -> str:
     """返回 'active' / 'inactive' / 'failed' / 'unknown'。"""
     try:
         r = subprocess.run(
-            ["systemctl", "--user", "is-active", "voice-input"],
+            ["systemctl", "--user", "is-active", "glisten"],
             capture_output=True, text=True, timeout=2,
         )
         s = r.stdout.strip()
@@ -255,10 +255,10 @@ def query_service_status() -> str:
 
 
 def restart_service() -> tuple:
-    """重启 voice-input 服务。返回 (success: bool, msg: str)。"""
+    """重启 glisten 服务。返回 (success: bool, msg: str)。"""
     try:
         r = subprocess.run(
-            ["systemctl", "--user", "restart", "voice-input"],
+            ["systemctl", "--user", "restart", "glisten"],
             capture_output=True, text=True, timeout=6,
         )
         if r.returncode == 0:

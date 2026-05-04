@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-voice-input CLI 入口。安装后 symlink 到 ~/.local/bin/voice-input。
+glisten CLI 入口。安装后 symlink 到 ~/.local/bin/glisten。
 
 子命令：
-  voice-input daemon                    启动守护进程（systemd ExecStart 用这个）
-  voice-input history [-n 20] [-s KW] [--today] [--days N]
+  glisten daemon                    启动守护进程（systemd ExecStart 用这个）
+  glisten history [-n 20] [-s KW] [--today] [--days N]
                                         查看识别历史
-  voice-input stats                     统计总条数/总时长/今日条数
+  glisten stats                     统计总条数/总时长/今日条数
 
 注意：本文件用 `/usr/bin/env python3` 当 shebang，但 daemon 子命令会 exec 到
 venv 的 python（daemon 需要 venv 里的 websockets/pynput），所以即使 CLI 被
@@ -105,7 +105,7 @@ def cmd_prune(args):
 
 def build_parser():
     p = argparse.ArgumentParser(
-        prog="voice-input",
+        prog="glisten",
         description="Linux 语音输入 daemon (豆包 ASR 2.0) + 历史查询",
     )
     sub = p.add_subparsers(dest="cmd", required=True)

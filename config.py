@@ -1,7 +1,7 @@
 """
-Listen / voice-input 配置读写。
+Listen / glisten 配置读写。
 
-路径：$XDG_CONFIG_HOME/voice-input/config.json（默认 ~/.config/voice-input/config.json）
+路径：$XDG_CONFIG_HOME/glisten/config.json（默认 ~/.config/glisten/config.json）
 
 schema:
 {
@@ -44,7 +44,7 @@ from typing import Any, Dict, List, Optional
 def config_path() -> Path:
     base = os.environ.get("XDG_CONFIG_HOME")
     root = Path(base) if base else Path.home() / ".config"
-    return root / "voice-input" / "config.json"
+    return root / "glisten" / "config.json"
 
 
 DEFAULT_CONFIG: Dict[str, Any] = {
