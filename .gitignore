@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.Python
+build/
+dist/
+
+# Virtual env
+venv/
+.venv/
+
+# Data / logs
+*.db
+*.db-journal
+*.log
+*.wav
+
+# Claude Design raw dump —— 本地保存的设计原稿，别 track
+design/
+
+# Tarball 打包输出
+/out/
+*.tar.gz
+
+# Editor
+.idea/
+.vscode/
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 本地 AI 工具相关
+.claude/
+.codex
+.codex/
+CLAUDE.md
+
+# 备份 / 早期开发脚本
+backup/
+test_*.py
+mic_asr.py

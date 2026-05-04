@@ -1,0 +1,24 @@
+[Unit]
+Description=Voice Input Daemon (F9 to dictate, Doubao ASR)
+# 要等桌面会话的 DISPLAY/XAUTHORITY 准备好；GNOME/XFCE on X11 通常在 graphical-session.target 之后
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+# %PROJECT_DIR% 由 install.sh 替换成项目绝对路径
+ExecStart=%PROJECT_DIR%/venv/bin/python %PROJECT_DIR%/voice_daemon.py
+Restart=on-failure
+RestartSec=3
+
+# systemd --user 的服务环境默认很干净；DISPLAY/XAUTHORITY 由 install.sh
+# 用 `systemctl --user import-environment` 从登录会话钩入，不在 unit 里硬编码
+# （硬编码 DISPLAY=:1 会在用户下次登录到 :0 时全盘失效）
+Environment=PYTHONUNBUFFERED=1
+
+# 日志进 journal，systemd 会自动按服务归档
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
