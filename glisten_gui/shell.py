@@ -1,9 +1,7 @@
 """
 窗口骨架：Titlebar + Sidebar + Main + Status。
 
-不做真正的 frameless window（overrideredirect 会丢 WM 功能如 Super+鼠标拖动、
-Ctrl+Alt+←/→ 切工作区等）——用标准 Toplevel，标题栏交给 WM。
-macOS 式交通灯在 Claude Design 视觉里是"装饰"，在 Linux 上我们不模拟。
+不做真正的 frameless window（overrideredirect 会丢 WM 功能如 Super+鼠标拖动、Ctrl+Alt+←/→ 切工作区等）——用标准 Toplevel，标题栏交给 WM。
 """
 import subprocess
 import tkinter as tk
@@ -112,7 +110,7 @@ class Shell(tk.Tk):
             logo.create_line(x1, y1, x2, y2, fill="white", width=2, capstyle="round")
         tk.Label(brand, text="GListen", bg=T.BG_SIDEBAR, fg=T.TEXT,
                  font=self.fonts.heading).pack(side="left", padx=(10, 0))
-        tk.Label(brand, text="1.0", bg=T.N_100, fg=T.TEXT_SUBTLE,
+        tk.Label(brand, text="1.0.0", bg=T.N_100, fg=T.TEXT_SUBTLE,
                  font=self.fonts.tiny, padx=6, pady=1).pack(side="right")
 
         # Nav items

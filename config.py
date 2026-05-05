@@ -1,5 +1,5 @@
 """
-Listen / glisten 配置读写。
+glisten 配置读写。
 
 路径：$XDG_CONFIG_HOME/glisten/config.json（默认 ~/.config/glisten/config.json）
 
@@ -105,7 +105,7 @@ def load() -> Dict[str, Any]:
 
 
 def save(config: Dict[str, Any]) -> None:
-    """原子写：先写临时文件，再 rename。避免写到一半断电导致 config 损坏。"""
+    """先写临时文件，再 rename。"""
     p = config_path()
     p.parent.mkdir(parents=True, exist_ok=True)
     tmp = p.with_suffix(".json.tmp")

@@ -8,16 +8,16 @@ Listen 设置窗入口。
 import sys
 from pathlib import Path
 
-# 让 listen_gui 能 import 顶层的 config / history / keys 模块
+# 让 glisten_gui 能 import 顶层的 config / history / keys 模块
 _PROJ = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(_PROJ))
 
-from listen_gui.shell import Shell, query_service_status  # noqa: E402
-from listen_gui.pages.shortcuts import ShortcutsPage      # noqa: E402
-from listen_gui.pages.behavior import BehaviorPage        # noqa: E402
-from listen_gui.pages.postprocess import PostprocessPage  # noqa: E402
-from listen_gui.pages.history import HistoryPage          # noqa: E402
-from listen_gui.pages.about import AboutPage              # noqa: E402
+from glisten_gui.shell import Shell, query_service_status  # noqa: E402
+from glisten_gui.pages.shortcuts import ShortcutsPage      # noqa: E402
+from glisten_gui.pages.behavior import BehaviorPage        # noqa: E402
+from glisten_gui.pages.postprocess import PostprocessPage  # noqa: E402
+from glisten_gui.pages.history import HistoryPage          # noqa: E402
+from glisten_gui.pages.about import AboutPage              # noqa: E402
 
 
 NAV = [

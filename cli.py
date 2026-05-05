@@ -24,7 +24,7 @@ sys.path.insert(0, str(PROJECT_DIR))
 VENV_PYTHON = PROJECT_DIR / "venv" / "bin" / "python"
 DAEMON_SCRIPT = PROJECT_DIR / "voice_daemon.py"
 SYSTEM_PYTHON = Path("/usr/bin/python3")
-GUI_ENTRY = PROJECT_DIR / "listen_gui" / "main.py"
+GUI_ENTRY = PROJECT_DIR / "glisten_gui" / "main.py"
 
 
 def cmd_daemon(args):

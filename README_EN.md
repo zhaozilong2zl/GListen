@@ -8,14 +8,30 @@
 Focus on any app → Hold hotkey → Speak → Release → Text pasted into that app
                       ↑ A floating HUD shows live transcription near your mouse
 ```
-
 <p align="center">
-  <img src="docs/screenshots/listen-shortcuts.png" width="700" alt="GListen Settings — Shortcuts page">
+  <img src="docs/screenshots/hud-live.png" width="500" alt="实际使用效果展示">
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/hud-live.png" width="500" alt="GListen floating HUD during dictation">
+  <img src="docs/screenshots/GUI-shortcuts.png" width="500" alt="GListen GUI 设置中心 — 快捷键页">
 </p>
+
+<p align="center">
+  <img src="docs/screenshots/GUI-behavior.png" width="500" alt="GListen GUI 设置中心 — 行为页">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/GUI-post_processing.png" width="500" alt="GListen GUI 设置中心 — 后处理页">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/GUI-history.png" width="500" alt="GListen GUI 设置中心 — 历史页">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/GUI-about.png" width="500" alt="GListen GUI 设置中心 — 关于页">
+</p>
+
 
 ## Features
 
@@ -73,7 +89,7 @@ After installation, GListen registers as a systemd user service that starts auto
 ### Installation
 
 ```bash
-git clone https://github.com/<your-username>/glisten.git
+git clone https://github.com/zhaozilong2zl/glisten.git
 cd glisten
 bash setup.sh
 ```
@@ -147,7 +163,7 @@ In the age of vibe coding, building a tool like this isn't particularly hard. I'
 | [闪电说](https://shandianshuo.cn/) | macOS/Win | Local + optional LLM API | Yes | Yes | No | Yes |
 | [Wispr Flow](https://wisprflow.com/) | macOS/Win/iOS/Android | Cloud (proprietary) | Yes | Yes | No | Yes |
 | [Superwhisper](https://superwhisper.com/) | macOS/Win/iOS | Whisper local + cloud | Yes | No | No | Yes |
-| [Koe](https://github.com/missuo/koe) | macOS only | Doubao 2.0 | Yes | Yes | No | No |
+| [Koe](https://github.com/missuo/koe) | macOS only | Doubao 2.0 (cloud) | Yes | Yes | No | No |
 | [Voxtype](https://github.com/peteonrails/voxtype) | Linux (Wayland-first) | Whisper local | Yes | No | No | No |
 | [Speed of Sound](https://github.com/zugaldia/speedofsound) | Linux (Flatpak) | Whisper + optional LLM | Yes | No | No | Yes |
 | [nerd-dictation](https://github.com/ideasman42/nerd-dictation) | Linux | VOSK local | Weak | No | No | No |
@@ -168,11 +184,14 @@ The process has three stages:
 **After recognition completes**: Post-processing rules are applied (e.g. "点"→"."), then the configured action chain executes: copy to clipboard → simulate paste keystroke → press additional keys (e.g. Enter) if configured.
 
 ```
-Hold hotkey → Record + stream audio → Doubao returns partials → Aggregator accumulates → HUD displays
-                                                                                          │
-Release   → Stop recording → Wait for final result → Post-process → Action chain (paste/keys)
-                                      ↑                                                   │
-                                      └──── Take Aggregator's final text ◀────────────────┘
+Hold hotkey
+  ├→ Record audio, stream to Doubao via WebSocket
+  ├→ Doubao returns partial results, HUD displays in real time
+  │
+Release hotkey
+  ├→ Stop recording, wait for final result
+  ├→ Post-process ("点"→".")
+  └→ Paste into target window
 ```
 
 ## Config format
@@ -225,13 +244,27 @@ bash setup.sh
 
 `setup.sh` walks you through installing dependencies, setting up the environment, and entering Doubao credentials — same as a fresh install. Credentials are not included in the archive (for security), so you'll need to grab your APP_ID and Access Token from the [Volcengine Console](https://console.volcengine.com/speech/app) again.
 
+## Uninstall / Reinstall
+
+If you need to uninstall or reinstall, **always stop the old service first** — otherwise you'll end up with two daemon processes fighting over the same hotkey (two HUDs pop up, recognition fails).
+
+```bash
+# Uninstall (stops service + removes unit file + removes CLI symlink)
+bash scripts/uninstall.sh
+
+# To reinstall, just run setup.sh again after uninstalling
+bash setup.sh
+```
+
+Uninstalling does not delete your config (`~/.config/glisten/`), history (`~/.local/share/glisten/`), or Doubao credentials (`~/.config/doubao/`). They'll still be there after reinstalling.
+
 ## Project structure
 
 | File | Role |
 |---|---|
 | `voice_daemon.py` | Main daemon: hotkey listener + Doubao WS + action chain + history recording |
 | `overlay_gui.py` | Floating HUD subprocess (system python3 for Xft/CJK font rendering) |
-| `listen_gui/` | GListen Settings GUI (tkinter, 5 pages) |
+| `glisten_gui/` | GListen Settings GUI (tkinter, 5 pages) |
 | `config.py` | JSON config load/save with schema + defaults + atomic write |
 | `keys.py` | Key name conversion: config string ↔ pynput Key ↔ tkinter keysym |
 | `history.py` | SQLite history module |

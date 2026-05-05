@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-Step 2b: 按住 F9 录音、松开识别。
-按 Ctrl+C 退出 daemon。
+按住热键录音、松开识别。
+按 Ctrl+C 或 Ctrl+\ 退出 daemon。
 
 架构：
-  pynput 线程 → F9 press/release 事件通过 asyncio.Event 传给主协程
-  主协程 loop：等 F9 按下 → 开 session → 等 F9 松开 → 收尾 → 回到等待
+  pynput 线程 → 热键 press/release 事件通过 asyncio.Event 传给主协程
+  主协程 loop：等热键按下 → 开 session → 等热键松开 → 收尾 → 回到等待
 """
 import asyncio
 import json
@@ -161,9 +161,8 @@ _COMPILED_RULES = _compile_postprocess_rules(
 
 
 # ---------- TranscriptAggregator ----------
-# 严格 port 自 missuo/koe 的 koe-asr/src/transcript.rs。
-# 豆包流式 ASR 的 result.text 在 VAD 分句后会重置（当前分句内累积，不跨分句），
-# 所以客户端必须累积。koe 做的也是这个。
+# 参考 missuo/koe 的 koe-asr/src/transcript.rs。
+# 豆包流式 ASR 的 result.text 在 VAD 分句后会重置（当前分句内累积，不跨分句），所以客户端必须累积。koe也是这样做的。
 def longest_overlap(tail: str, head: str) -> int:
     """返回最长 k 使得 tail[-k:] == head[:k]。处理分段边界重叠字符。"""
     max_k = min(len(tail), len(head))

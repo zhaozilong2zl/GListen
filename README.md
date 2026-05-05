@@ -91,7 +91,7 @@
 ### 安装
 
 ```bash
-git clone https://github.com/<your-username>/glisten.git
+git clone https://github.com/zhaozilong2zl/glisten.git
 cd glisten
 bash setup.sh
 ```
@@ -165,7 +165,7 @@ Linux 上不是完全没选择，但都有各自的限制：
 | [闪电说](https://shandianshuo.cn/) | macOS/Win | 本地端侧 + 可选 LLM API | 是 | 是 | 否 | 是 |
 | [Wispr Flow](https://wisprflow.com/) | macOS/Win/iOS/Android | 云端自研 | 是 | 是 | 否 | 是 |
 | [Superwhisper](https://superwhisper.com/) | macOS/Win/iOS | Whisper 本地+云端 | 是 | 否 | 否 | 是 |
-| [Koe](https://github.com/missuo/koe) | 仅 macOS | 豆包 2.0 | 是 | 是 | 否 | 否 |
+| [Koe](https://github.com/missuo/koe) | 仅 macOS | 豆包 2.0（云端） | 是 | 是 | 否 | 否 |
 | [Voxtype](https://github.com/peteonrails/voxtype) | Linux（Wayland 为主） | Whisper 本地 | 是 | 否 | 否 | 否 |
 | [Speed of Sound](https://github.com/zugaldia/speedofsound) | Linux (Flatpak) | Whisper + 可选 LLM | 是 | 否 | 否 | 是 |
 | [nerd-dictation](https://github.com/ideasman42/nerd-dictation) | Linux | VOSK 本地 | 弱 | 否 | 否 | 否 |
@@ -186,11 +186,14 @@ GListen 需要联网 + 火山引擎账号（当然你可以 DIY 成本地模型�
 **识别完成后**：对最终文本做后处理（应用"点"→"."等替换规则），然后按配置的动作链依次执行：复制到剪贴板 → 模拟粘贴快捷键 → 如果配了额外按键（比如 Enter）再按一下。
 
 ```
-按住热键 → 录音+实时发送 → 豆包返回partial → Aggregator累积 → 浮窗显示
-                                                                   │
-松开热键 → 停止录音 → 等最终结果 → 后处理("点"→".") → 动作链(粘贴/按键)
-                                      ↑                            │
-                                      └──── 取Aggregator最终文本 ◀─┘
+按住热键
+  ├→ 录音，音频流式发送给豆包
+  ├→ 豆包持续返回识别结果，浮窗实时显示
+  │
+松开热键
+  ├→ 停止录音，等待最终识别结果
+  ├→ 后处理（"点"→"."）
+  └→ 粘贴到目标窗口
 ```
 
 ## 配置格式
@@ -243,13 +246,27 @@ bash setup.sh
 
 `setup.sh` 会引导你装依赖、建环境、填豆包凭证，和第一次安装流程一样。凭证不在压缩包里（安全考虑，防止不慎泄漏在互联网的黑暗森林中被盗用），需要重新从[火山引擎控制台](https://console.volcengine.com/speech/app)拿 APP_ID 和 Access Token 填一遍。
 
+## 卸载 / 重装
+
+如果需要卸载或者重新安装，**一定要先停掉旧服务再装新的**，否则会出现两个进程同时抢热键的情况（两个浮窗、识别失败）。
+
+```bash
+# 卸载（停止服务 + 删除 unit 文件 + 删除 CLI 软链）
+bash scripts/uninstall.sh
+
+# 如果要重装，卸载后直接重新跑 setup.sh
+bash setup.sh
+```
+
+卸载不会删除你的配置（`~/.config/glisten/`）、历史记录（`~/.local/share/glisten/`）和豆包凭证（`~/.config/doubao/`），重装后这些数据还在。
+
 ## 项目结构
 
 | 文件 | 职责 |
 |---|---|
 | `voice_daemon.py` | 主守护进程：热键监听 + 豆包 WS + 动作链 + 历史写入 |
 | `overlay_gui.py` | 浮窗 HUD 子进程（系统 python3，Xft 渲染中文） |
-| `listen_gui/` | GListen 设置中心（tkinter，5 页） |
+| `glisten_gui/` | GListen 设置中心（tkinter，5 页） |
 | `config.py` | 配置读写（JSON schema + 默认值 + 原子写入） |
 | `keys.py` | 键名转换：配置字符串 ↔ pynput Key ↔ tkinter keysym |
 | `history.py` | SQLite 历史模块 |
@@ -265,6 +282,6 @@ bash setup.sh
 ## 联系方式
 2507844603@qq.com
 
-## LICENSE
+## License
 
 MIT
