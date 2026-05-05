@@ -43,11 +43,11 @@
 
 ### 多热键 + 动作链
 
-除了默认的"录完粘贴"，你可以给其他按键绑定不同的动作组合。比如：
+除了默认的按 F9 "录完粘贴"，还可以给其他按键绑定不同的动作组合。比如：
 
 - **F9**（默认）：录完 → 粘贴到焦点窗口
-- **F10**：录完 → 粘贴 → 自动按 Enter 发送（适合聊天窗口，说完直接发出去）
-- **F11**：录完 → 只复制到剪贴板，不粘贴（你自己选时机贴）
+- **F10**：录完 → 粘贴 → 自动按 Enter 发送
+- **F11**：录完 → 只复制到剪贴板，不直接粘贴
 
 在 GUI 设置中心的"快捷键"页面里添加，可添加多个热键。
 
@@ -55,7 +55,7 @@
 
 编程时经常需要口述符号——"settings 点 json" 会被 ASR 识别成文字 `settings 点 json`。后处理规则自动把两个英文词之间的"点"替换成 `.`，变成 `settings.json`。类似的内置规则还有"斜杠"→`/`、"下划线"→`_` 等。
 
-你也可以在 GUI 里自定义规则，比如把"克劳德"替换成"Claude"、"派森"替换成"Python"。规则分两种模式：**只在英文词之间替换**（不会把"重点"误改成"重."）和**任何位置替换**（适合专有名词）。
+支持在 GUI 里自定义规则，比如把"克劳德"替换成"Claude"、"派森"替换成"Python"。规则分两种模式：**只在英文词之间替换**（不会把"重点"误改成"重."）和**任何位置替换**（适合专有名词）。
 
 ### GUI 设置中心
 
@@ -86,7 +86,7 @@
 - Python 3.8+（系统）+ Python 3.10+（venv，装 websockets / pynput）
 - **豆包 ASR 2.0 凭证**——去[火山引擎控制台](https://console.volcengine.com/speech/app)开通"豆包流式语音识别模型 2.0"，拿到 APP_ID 和 Access Token
 
-> **关于 X11 和 Wayland 适配**：GListen 使用的几个系统工具（pynput 全局热键监听、xdotool 文字注入、xclip 剪贴板）都是 X11 生态下的标准工具。Ubuntu 22.04 及之前默认是 X11，不需要做任何设置。Ubuntu 24.04+ 默认改为了 Wayland，由于 Wayland 的安全模型禁止应用监听其他窗口的键盘事件和注入文字，GListen将无法工作。如果你的系统是 24.04+，需要在开机登录界面（输密码的那个页面）右下角的齿轮图标里选择 "Ubuntu on Xorg"。
+> **关于 X11 和 Wayland 适配**：GListen 使用的几个系统工具（pynput 全局热键监听、xdotool 文字注入、xclip 剪贴板）都是 X11 生态下的标准工具。Ubuntu 22.04 及之前默认是 X11，不需要做任何设置。Ubuntu 24.04+ 默认改为了 Wayland，由于 Wayland 的安全模型禁止应用监听其他窗口的键盘事件和注入文字，GListen将无法工作。如果所使用的系统是 24.04+，需要在开机登录界面（输密码的那个页面）右下角的齿轮图标里选择 "Ubuntu on Xorg"。
 
 ### 安装
 
@@ -173,7 +173,7 @@ Linux 上不是完全没选择，但都有各自的限制：
 | macOS 听写 | macOS | Apple 本地 | 是 | 是 | 系统按键 | 系统 |
 | Windows 语音输入 | Windows 11 | Azure 云端 | 是 | 是 | Win+H | 系统 |
 
-GListen 需要联网 + 火山引擎账号（当然你可以 DIY 成本地模型，或者适配其他的 API）。
+GListen 需要联网 + 火山引擎账号（也可以 DIY 成本地模型，或者适配其他的 API）。
 
 ## 工作原理
 
@@ -244,7 +244,7 @@ cd glisten
 bash setup.sh
 ```
 
-`setup.sh` 会引导你装依赖、建环境、填豆包凭证，和第一次安装流程一样。凭证不在压缩包里（安全考虑，防止不慎泄漏在互联网的黑暗森林中被盗用），需要重新从[火山引擎控制台](https://console.volcengine.com/speech/app)拿 APP_ID 和 Access Token 填一遍。
+`setup.sh` 会引导安装依赖、建环境、填豆包凭证，和第一次安装流程一样。凭证不在压缩包里（安全考虑，防止不慎泄漏在互联网的黑暗森林中被盗用），需要重新从[火山引擎控制台](https://console.volcengine.com/speech/app)拿 APP_ID 和 Access Token 填一遍。
 
 ## 卸载 / 重装
 
@@ -258,7 +258,7 @@ bash scripts/uninstall.sh
 bash setup.sh
 ```
 
-卸载不会删除你的配置（`~/.config/glisten/`）、历史记录（`~/.local/share/glisten/`）和豆包凭证（`~/.config/doubao/`），重装后这些数据还在。
+卸载不会删除原有配置（`~/.config/glisten/`）、历史记录（`~/.local/share/glisten/`）和豆包凭证（`~/.config/doubao/`），重装后这些数据还在。
 
 ## 项目结构
 

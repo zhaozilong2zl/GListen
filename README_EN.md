@@ -256,7 +256,7 @@ bash scripts/uninstall.sh
 bash setup.sh
 ```
 
-Uninstalling does not delete your config (`~/.config/glisten/`), history (`~/.local/share/glisten/`), or Doubao credentials (`~/.config/doubao/`). They'll still be there after reinstalling.
+Uninstalling only stops the service and removes the symlink — it does not delete the Python environment (venv), config (`~/.config/glisten/`), history (`~/.local/share/glisten/`), or Doubao credentials (`~/.config/doubao/`). When you reinstall, `setup.sh` detects these are already in place and skips them.
 
 ## Project structure
 

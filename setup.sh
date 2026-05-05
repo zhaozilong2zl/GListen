@@ -101,12 +101,16 @@ else
     ok "venv 已存在，跳过"
 fi
 
-echo "pip install websockets<16 + pynput"
-"$VENV/bin/pip" install --quiet --upgrade pip \
-    -i https://pypi.tuna.tsinghua.edu.cn/simple
-"$VENV/bin/pip" install --quiet 'websockets<16' pynput \
-    -i https://pypi.tuna.tsinghua.edu.cn/simple
-ok "Python 依赖已装"
+if "$VENV/bin/python" -c "import websockets; import pynput" 2>/dev/null; then
+    ok "Python 依赖已装，跳过"
+else
+    echo "pip install websockets<16 + pynput"
+    "$VENV/bin/pip" install --quiet --upgrade pip \
+        -i https://pypi.tuna.tsinghua.edu.cn/simple
+    "$VENV/bin/pip" install --quiet 'websockets<16' pynput \
+        -i https://pypi.tuna.tsinghua.edu.cn/simple
+    ok "Python 依赖已装"
+fi
 
 banner "4/5 豆包凭证"
 
